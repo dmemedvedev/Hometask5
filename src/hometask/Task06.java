@@ -6,49 +6,56 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class Task06 {
-    public static void main(String[] args) throws IOException {
-        BufferedReader reader;
-        reader = new BufferedReader(new FileReader("matrix.txt"));
+    public static void main(String[] args) {
+            try {
+                Scanner scanner = new Scanner(new File("matrix.txt"));
 
-        String firstDimension = reader.readLine();
-        String[] split = firstDimension.split(" ");
-        int firstX = Integer.parseInt(split[0]);
-        int firstY = Integer.parseInt(split[0]);
+                int n = scanner.nextInt();
+                int m = scanner.nextInt();
 
-        int[][] first = new int[firstX][firstY];
+             
+                int[][] matrix1 = new int[n][m];
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < m; j++) {
+                        matrix1[i][j] = scanner.nextInt();
+                    }
+                }
+                scanner.nextLine();
+                int[][] matrix2 = new int[n][m];
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < m; j++) {
+                        matrix2[i][j] = scanner.nextInt();
+                    }
+                }
+                int[][] sumMatrix = new int[n][m];
+                int[][] diffMatrix = new int[n][m];
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < m; j++) {
+                        sumMatrix[i][j] = matrix1[i][j] + matrix2[i][j];
+                        diffMatrix[i][j] = matrix1[i][j] - matrix2[i][j];
+                    }
+                }
+                System.out.println("Sum of matrices:");
+                printMatrix(sumMatrix);
 
-        for (int i = 0; i < firstX; i++) {
-            String[] line;
-            line = reader.readLine().split(" ");
+                System.out.println("Difference of matrices:");
+                printMatrix(diffMatrix);
 
-            for (int j = 0; j < firstY; j++) {
-                first[i][j] = Integer.parseInt(line[j]);
+                scanner.close();
+
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found: " + e.getMessage());
             }
-
         }
 
-        // Read "@"
-        reader.readLine();
-
-        String secondDimension = reader.readLine();
-        String[] split2 = secondDimension.split("");
-        int secX = Integer.parseInt(split2[0]);
-        int secY = Integer.parseInt(split2[0]);
-
-        int[][] second = new int[secX][secY];
-
-        for (int i = 0; i < secX; i++) {
-            String[] line;
-            line = reader.readLine().split(" ");
-
-            for (int j = 0; j < secY; j++) {
-                second[i][j] = Integer.parseInt(line[j]);
+        public static void printMatrix(int[][] matrix) {
+            int n = matrix.length;
+            int m = matrix[0].length;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    System.out.print(matrix[i][j] + " ");
+                }
+                System.out.println();
             }
-
         }
-
-        System.out.println(Arrays.deepToString(first));
-
-        reader.close();
     }
-}
