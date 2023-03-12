@@ -7,32 +7,27 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Task10 {
-    public static void main(String[] args) throws Exception {
-        FileInputStream fis = new FileInputStream("boxes.dat");
-        ObjectInputStream ois = new ObjectInputStream(fis);
-
-        Box box1 = (Box) ois.readObject();
-        Box box2 = (Box) ois.readObject();
-        Box box3 = (Box) ois.readObject();
-
-        ArrayList<Box> boxes = new ArrayList<>();
-
-        for (int i = 0; i < 5; i++) {
-            boxes.add((Box) ois.readObject());
-        }
-
-        ois.close();
-        fis.close();
-
-        Collections.sort(boxes, new Comparator<Box>() {
-            @Override
-            public int compare(Box b1, Box b2) {
-                return Integer.compare(b1.volume(), b2.volume());
+    public static void main(String[] args) {
+            Box[] boxes = null;
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("boxes.dat"))) {
+                boxes = (Box[]) ois.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
-        });
 
-        for (Box box : boxes) {
-            System.out.println("Box(" + box.x + ", " + box.y + ", " + box.z + ") has volume " + box.volume());
+            Arrays.sort(boxes, Comparator.comparing(Box::volume));
+
+            for (Box box : boxes) {
+                System.out.println(box.volume());
+            }
+
+            int largestVolume = boxes[boxes.length - 1].volume();
+            System.out.println("Largest volume: " + largestVolume);
+
+            try (PrintWriter writer = new PrintWriter(new FileWriter("OUTPUT.txt"))) {
+                writer.println(largestVolume);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
-}
